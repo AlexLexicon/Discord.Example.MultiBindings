@@ -69,7 +69,6 @@
                                                 </ControlTemplate>
                                             </Setter.Value>
                                         </Setter>
-
                                         <Style.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
                                                 <Setter Property="Background" Value="{StaticResource MyComboBoxStyle_Background_MouseOver}"/>
@@ -132,8 +131,7 @@
                                         Background="{StaticResource MyComboBoxStyle_Background_Normal}"
                                         BorderThickness="{StaticResource MyComboBoxStyle_Border_Thickness}"
                                         BorderBrush="{StaticResource MyComboBoxStyle_Border_Brush}"/>
-                                    <ScrollViewer 
-                                        SnapsToDevicePixels="True">
+                                    <ScrollViewer SnapsToDevicePixels="True">
                                         <StackPanel 
                                             IsItemsHost="True" 
                                             KeyboardNavigation.DirectionalNavigation="Contained"/>
@@ -141,7 +139,6 @@
                                 </Grid>
                             </Popup>
                         </Grid>
-                        
                         <ControlTemplate.Triggers>
                             <Trigger Property="HasItems" Value="false">
                                 <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
