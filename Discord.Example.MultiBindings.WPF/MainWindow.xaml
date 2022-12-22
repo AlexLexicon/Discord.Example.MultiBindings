@@ -29,36 +29,23 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+
+            <!--Default-->
+            <Setter Property="Background" Value="#FFF4F4F4"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderThickness" Value="0"/>
+
             <Style.Triggers>
 
-                <!--LightMode Default-->
-                <DataTrigger Binding="{Binding Path=Theme, Source={x:Static properties:Settings.Default}}" Value="light">
-                    <Setter Property="Background" Value="#FFF4F4F4"/>
-                    <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                </DataTrigger>
-                
-                <!--LightMode MouseOver-->
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
-                        <Condition Binding="{Binding Path=Theme, Source={x:Static properties:Settings.Default}}" Value="light"/>
-                    </MultiDataTrigger.Conditions>
-                    <MultiDataTrigger.Setters>
-                        <Setter Property="Background" Value="#FFD7D7D7"/>
-                    </MultiDataTrigger.Setters>
-                </MultiDataTrigger>
+                <!--Default MouseOver-->
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFD7D7D7"/>
+                </Trigger>
 
-                <!--LightMode Pressed-->
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
-                        <Condition Binding="{Binding Path=Theme, Source={x:Static properties:Settings.Default}}" Value="light"/>
-                    </MultiDataTrigger.Conditions>
-                    <MultiDataTrigger.Setters>
-                        <Setter Property="Background" Value="#FFC5C5C5"/>
-                    </MultiDataTrigger.Setters>
-                </MultiDataTrigger>
+                <!--Default Pressed-->
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#FFC5C5C5"/>
+                </Trigger>
 
                 <!--DarkMode Default-->
                 <DataTrigger Binding="{Binding Path=Theme, Source={x:Static properties:Settings.Default}}" Value="dark">
