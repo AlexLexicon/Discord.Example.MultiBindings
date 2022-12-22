@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:properties="clr-namespace:Discord.Example.MultiBindings.WPF.Properties"
     mc:Ignorable="d"
     Title="MainWindow" 
     Width="800"
@@ -12,107 +11,166 @@
 
     <Window.Resources>
 
-        <Style x:Key="MyButtonStyle" TargetType="Button">
+        <SolidColorBrush x:Key="MyComboBoxStyle_Background_Normal" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="MyComboBoxStyle_Background_MouseOver" Color="#FFE5E5E5"/>
+        <SolidColorBrush x:Key="MyComboBoxStyle_Background_Open" Color="#FFD6D6D6"/>
+
+        <!--this includes the arrow-->
+        <SolidColorBrush x:Key="MyComboBoxStyle_Foreground_Normal" Color="#FF000000"/>
+        <SolidColorBrush x:Key="MyComboBoxStyle_Foreground_MouseOver" Color="#FF000000"/>
+        <SolidColorBrush x:Key="MyComboBoxStyle_Foreground_Open" Color="#FF000000"/>
+
+        <SolidColorBrush x:Key="MyComboBoxStyle_Border_Brush" Color="#FFBFBFBF"/>
+        <Thickness x:Key="MyComboBoxStyle_Border_Thickness">1</Thickness>
+
+        <Thickness x:Key="MyComboBoxStyle_Padding">4,2</Thickness>
+
+        <HorizontalAlignment x:Key="MyComboBoxStyle_HorizontalContentAlignment">Left</HorizontalAlignment>
+        <VerticalAlignment x:Key="MyComboBoxStyle_VerticalContentAlignment">Center</VerticalAlignment>
+
+        <Style x:Key="MyComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border 
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            Background="{TemplateBinding Background}"
-                            Padding="{TemplateBinding Padding}">
-                            <ContentPresenter 
-                                Content="{TemplateBinding Content}"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton
+                                Name="ToggleButton"
+                                BorderBrush="{StaticResource MyComboBoxStyle_Border_Brush}"
+                                BorderThickness="{StaticResource MyComboBoxStyle_Border_Thickness}"
+                                Focusable="false"
+                                MinHeight="24"
+                                IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                ClickMode="Press">
+                                <ToggleButton.Style>
+                                    <Style TargetType="ToggleButton">
+                                        <Setter Property="Background" Value="{StaticResource MyComboBoxStyle_Background_Normal}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource MyComboBoxStyle_Foreground_Normal}"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ToggleButton">
+                                                    <Border
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        Padding="{StaticResource MyComboBoxStyle_Padding}">
+                                                        <DockPanel>
+                                                            <Path 
+                                                                Name="Arrow"
+                                                                DockPanel.Dock="Right"
+                                                                Data="M 0 0 L 4 4 L 8 0 Z"
+                                                                VerticalAlignment="Center"
+                                                                Fill="{TemplateBinding Foreground}">
+                                                            </Path>
+                                                            <Label/>
+                                                        </DockPanel>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource MyComboBoxStyle_Background_MouseOver}"/>
+                                                <Setter Property="Foreground" Value="{StaticResource MyComboBoxStyle_Foreground_MouseOver}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource MyComboBoxStyle_Background_Open}"/>
+                                                <Setter Property="Foreground" Value="{StaticResource MyComboBoxStyle_Foreground_Open}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource MyComboBoxStyle_Background_Open}"/>
+                                                <Setter Property="Foreground" Value="{StaticResource MyComboBoxStyle_Foreground_Open}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ToggleButton.Style>
+                            </ToggleButton>
+                            <Label 
+                                IsHitTestVisible="False"
+                                Padding="{StaticResource MyComboBoxStyle_Padding}"
+                                HorizontalContentAlignment="{StaticResource MyComboBoxStyle_HorizontalContentAlignment}"
+                                VerticalContentAlignment="{StaticResource MyComboBoxStyle_VerticalContentAlignment}">
+                                <ContentPresenter
+                                    IsHitTestVisible="False"
+                                    Content="{TemplateBinding SelectionBoxItem}"
+                                    ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                    ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>
+                                <Label.Style>
+                                    <Style TargetType="Label">
+                                        <Setter Property="Foreground" Value="{StaticResource MyComboBoxStyle_Foreground_Normal}"/>
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsMouseOver, ElementName=ToggleButton}" Value="true">
+                                                <Setter Property="Foreground" Value="{StaticResource MyComboBoxStyle_Foreground_MouseOver}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=IsPressed, ElementName=ToggleButton}" Value="true">
+                                                <Setter Property="Foreground" Value="{StaticResource MyComboBoxStyle_Foreground_Open}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=IsChecked, ElementName=ToggleButton}" Value="true">
+                                                <Setter Property="Foreground" Value="{StaticResource MyComboBoxStyle_Foreground_Open}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
+                            <Popup
+                                Name="Popup"
+                                Placement="Bottom"
+                                IsOpen="{TemplateBinding IsDropDownOpen}"
+                                AllowsTransparency="True"
+                                Focusable="False"
+                                PopupAnimation="Slide">
+                                <Grid
+                                    Name="DropDown"
+                                    SnapsToDevicePixels="True"               
+                                    MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border
+                                        x:Name="DropDownBorder"
+                                        Background="{StaticResource MyComboBoxStyle_Background_Normal}"
+                                        BorderThickness="{StaticResource MyComboBoxStyle_Border_Thickness}"
+                                        BorderBrush="{StaticResource MyComboBoxStyle_Border_Brush}"/>
+                                    <ScrollViewer 
+                                        SnapsToDevicePixels="True">
+                                        <StackPanel 
+                                            IsItemsHost="True" 
+                                            KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                        
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                                <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-
-                <!--LightMode Default-->
-                <DataTrigger Binding="{Binding Path=Theme, Source={x:Static properties:Settings.Default}}" Value="light">
-                    <Setter Property="Background" Value="#FFF4F4F4"/>
-                    <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                </DataTrigger>
-                
-                <!--LightMode MouseOver-->
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
-                        <Condition Binding="{Binding Path=Theme, Source={x:Static properties:Settings.Default}}" Value="light"/>
-                    </MultiDataTrigger.Conditions>
-                    <MultiDataTrigger.Setters>
-                        <Setter Property="Background" Value="#FFD7D7D7"/>
-                    </MultiDataTrigger.Setters>
-                </MultiDataTrigger>
-
-                <!--LightMode Pressed-->
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
-                        <Condition Binding="{Binding Path=Theme, Source={x:Static properties:Settings.Default}}" Value="light"/>
-                    </MultiDataTrigger.Conditions>
-                    <MultiDataTrigger.Setters>
-                        <Setter Property="Background" Value="#FFC5C5C5"/>
-                    </MultiDataTrigger.Setters>
-                </MultiDataTrigger>
-
-                <!--DarkMode Default-->
-                <DataTrigger Binding="{Binding Path=Theme, Source={x:Static properties:Settings.Default}}" Value="dark">
-                    <Setter Property="Background" Value="#FF606060"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                </DataTrigger>
-
-                <!--DarkMode MouseOver-->
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
-                        <Condition Binding="{Binding Path=Theme, Source={x:Static properties:Settings.Default}}" Value="dark"/>
-                    </MultiDataTrigger.Conditions>
-                    <MultiDataTrigger.Setters>
-                        <Setter Property="Background" Value="#FF6D6D6D"/>
-                    </MultiDataTrigger.Setters>
-                </MultiDataTrigger>
-
-                <!--DarkMode Pressed-->
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
-                        <Condition Binding="{Binding Path=Theme, Source={x:Static properties:Settings.Default}}" Value="dark"/>
-                    </MultiDataTrigger.Conditions>
-                    <MultiDataTrigger.Setters>
-                        <Setter Property="Background" Value="#FF797979"/>
-                    </MultiDataTrigger.Setters>
-                </MultiDataTrigger>
-                
-            </Style.Triggers>
         </Style>
-        
+
     </Window.Resources>
     
     <Grid>
         <StackPanel 
             Width="128" 
             VerticalAlignment="Center">
-            <Button 
-                Height="24" 
-                Content="Option 1" 
-                Margin="0,0,0,4"
-                Style="{StaticResource MyButtonStyle}"/>
-            <Button 
-                Height="24" 
-                Content="Option 2" 
-                Margin="0,0,0,4"
-                Style="{StaticResource MyButtonStyle}"/>
-            <Button 
-                Height="24" 
-                Content="Option 3" 
-                Margin="0,0,0,4"
-                Style="{StaticResource MyButtonStyle}"/>
+            <ComboBox Style="{DynamicResource MyComboBoxStyle}">
+                <ComboBoxItem Content="PC" />
+                <ComboBoxItem Content="Nintendo NES / Famicom" Background="#FF400000" />
+                <ComboBoxItem Content="Nintendo SNES / Super Famicom" Background="#FF400000" />
+                <ComboBoxItem Content="Nintendo 64"/>
+                <ComboBoxItem Content="Nintendo Gamecube"/>
+            </ComboBox>
         </StackPanel>
     </Grid>
 </Window>
