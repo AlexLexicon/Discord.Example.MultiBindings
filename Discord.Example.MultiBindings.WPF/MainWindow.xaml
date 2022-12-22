@@ -49,7 +49,7 @@
                     </MultiDataTrigger.Setters>
                 </MultiDataTrigger>
 
-                <!--LightMode MouseDown-->
+                <!--LightMode Pressed-->
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
@@ -78,7 +78,7 @@
                     </MultiDataTrigger.Setters>
                 </MultiDataTrigger>
 
-                <!--DarkMode MouseDown-->
+                <!--DarkMode Pressed-->
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
