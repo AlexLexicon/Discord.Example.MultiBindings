@@ -88,7 +88,7 @@
                                                                 VerticalAlignment="Center"
                                                                 Fill="{TemplateBinding Foreground}">
                                                             </Path>
-                                                            <Label/>
+                                                            <Label Padding="0"/>
                                                         </DockPanel>
                                                     </Border>
                                                 </ControlTemplate>
@@ -111,7 +111,9 @@
                                     </Style>
                                 </ToggleButton.Style>
                             </ToggleButton>
+                            <!--We add a 12px margin for the arrow-->
                             <Label 
+                                Margin="0,0,12,0"
                                 IsHitTestVisible="False"
                                 Padding="{StaticResource MyComboBoxStyle_Padding}"
                                 HorizontalContentAlignment="{StaticResource MyComboBoxStyle_HorizontalContentAlignment}"
@@ -184,7 +186,7 @@
     
     <Grid>
         <StackPanel 
-            Width="128" 
+            HorizontalAlignment="Center" 
             VerticalAlignment="Center">
             <ComboBox Style="{DynamicResource MyComboBoxStyle}">
                 <ComboBoxItem Content="PC" />
